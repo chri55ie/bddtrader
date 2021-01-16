@@ -2,7 +2,6 @@ package net.bddtrader;
 
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
-import net.bddtrader.clients.Client;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -15,8 +14,9 @@ import static org.hamcrest.Matchers.not;
 public class WhenCreatingANewClient {
 
     @Before
-    public void setupBaseUrl() {
+    public void setup() {
         RestAssured.baseURI = "http://localhost:9000/api";
+        RestAssured.basic("user", "password");
     }
 
     @Test
@@ -39,6 +39,7 @@ public class WhenCreatingANewClient {
                 .and().body("lastName", equalTo("Scott"));
     }
 
+
     @Test
     public void a_new_client_can_be_created_using_a_map_structure() {
 
@@ -47,7 +48,7 @@ public class WhenCreatingANewClient {
         clientData.put("firstName","Kevin");
         clientData.put("lastName","Malone");
 
-        RestAssured.given()
+       Authentication.digest()
                 .contentType(ContentType.JSON)
                 .body(clientData)
                 .when()
